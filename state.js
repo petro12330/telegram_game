@@ -8,11 +8,13 @@ const baseStateEnum = {
     }
 }
 export const appState = {
+    "ctx": null,
+    "canvas": null,
+    "bufferCanvas": null,
+    "bufferCtx": null,
     "score": 0,
     "isInitial": true,
     "baseState": baseStateEnum.menu,
     "sprites": {},
-    "ctx": null,
-    "canvas": null,
     "resources": null
 }

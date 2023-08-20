@@ -4,7 +4,7 @@ let imgPath = 'imgs/'
 export const getImageSrc = (imgName) => {
     return `${imgPath}${imgName}`
 }
-let canvas
+// let canvas
 let ctx
 (function () {
     var resourceCache = {};
@@ -79,11 +79,19 @@ resources.load([
     getImageSrc("rotate_5.png"),
     getImageSrc("rotate_6.png"),
     getImageSrc("rotate_7.png"),
+    getImageSrc("pink_monster_1/pink_monster_climb_4.png"),
+    getImageSrc("cloud/cloud_1.png"),
+    getImageSrc("cloud/cloud_2.png"),
+    getImageSrc("cloud/cloud_3.png"),
+    getImageSrc("cloud/cloud_4.png"),
+    getImageSrc("cloud/cloud_5.png"),
+    getImageSrc("cloud/cloud_6.png"),
+    getImageSrc("cloud/all_cloud.png"),
 ]);
 
 
 const clearCanvas = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    appState.ctx.clearRect(0, 0, appState.canvas.width, appState.canvas.height);
 }
 
 const main = () => {
@@ -95,7 +103,7 @@ const main = () => {
 }
 const mainLoop = () => {
     if (appState.isInitial) {
-        appState.sprites = []
+        appState.sprites = {}
     }
     main()
     if (appState.isInitial){
@@ -107,31 +115,30 @@ const mainLoop = () => {
 
 const setCanvasSize = () => {
     console.log(1)
-    let canvasOldWidth = canvas.width
-    let canvasOldHeight = canvas.height
-    canvas.height = window.innerHeight * 0.8
+    let canvasOldWidth = appState.canvas.width
+    let canvasOldHeight = appState.canvas.height
+    appState.canvas.height = window.innerHeight * 0.8
 
     if (window.innerWidth > 600) {
         // For laptop
-        canvas.width = 600
+        appState.canvas.width = 600
     } else {
-        canvas.width = window.innerWidth;
+        appState.canvas.width = window.innerWidth;
         // canvas.height = 700;
     }
-    if (canvas.width !== canvasOldWidth || canvas.height !== canvasOldHeight){
-        appState.isInitial = true
-    }
+    // if (canvas.width !== canvasOldWidth || canvas.height !== canvasOldHeight){
+    //     appState.isInitial = true
+    // }
 
 }
 const init = () => {
 
-    canvas = document.getElementById("canvas");
-    ctx = canvas.getContext("2d");
-
+    appState.canvas = document.getElementById("canvas");
+    appState.ctx =  appState.canvas.getContext("2d");
+    appState.bufferCanvas = document.createElement('canvas');
+    appState.bufferCtx = appState.bufferCanvas.getContext('2d');
     setCanvasSize()
 
-    appState.ctx = ctx
-    appState.canvas = canvas
     appState.resources = resources
 
     mainLoop()

@@ -11,3 +11,8 @@ const resourcesImg = [
     '../imgs/rotate_6.png',
     '../imgs/rotate_7.png',
 ]
+
+// Default ground img scale
+export const groundImageScale = 0.5
+
+export const countCloudMenu = 4

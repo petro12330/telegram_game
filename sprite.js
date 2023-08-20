@@ -16,6 +16,7 @@ export class Sprite {
         this.xPos = options.xPos || 0
         this.yPos = options.yPos || 0
 
+        this.isChanged = true
     }
 
     getRealWidth() {
@@ -27,8 +28,16 @@ export class Sprite {
 
     }
 
-    clearRect() {
-        this.ctx.clearRect(0, 0, this.width / this.numberOfFrames, this.height)
+    changeCor({newX = 0, newY = 0, changeX = 0, changeY = 0}) {
+        if (newX || newY) {
+            this.xPos = newX
+            this.yPos = newY
+            this.isChanged = true
+        } else if (changeX || changeY) {
+            this.xPos += changeX
+            this.yPos += changeY
+            this.isChanged = true
+        }
     }
 
     update() {
@@ -38,14 +47,15 @@ export class Sprite {
             this.tickCount = 0;
             if (this.frameIndex < this.numberOfFrames - 1) {
                 this.frameIndex++;
+                this.isChanged = true
             } else {
                 this.frameIndex = 0;
+                this.isChanged = true
             }
         }
     }
 
     render() {
-        // this.ctx.clearRect(0, 0, 1000, 1000)
 
         this.ctx.drawImage(
             this.image,
@@ -62,6 +72,8 @@ export class Sprite {
 
     start() {
         this.update();
-        this.render();
+        if (this.isChanged) {
+            this.render();
+        }
     }
 }
