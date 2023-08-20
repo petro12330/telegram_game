@@ -10,13 +10,23 @@ export class Sprite {
         this.numberOfFrames = options.numberOfFrames || 1;
 
         this.imgScale = options.imgScale || 1
-        this.width = options.width;
-        this.height = options.height;
+        this.width = options.width || this.image.width;
+        this.height = options.height || this.image.height;
 
         this.xPos = options.xPos || 0
         this.yPos = options.yPos || 0
 
     }
+
+    getRealWidth() {
+        return this.width * this.imgScale / this.numberOfFrames
+    }
+
+    getRealHeight() {
+        return this.height * this.imgScale
+
+    }
+
     clearRect() {
         this.ctx.clearRect(0, 0, this.width / this.numberOfFrames, this.height)
     }
@@ -45,8 +55,8 @@ export class Sprite {
             this.height,
             this.xPos,
             this.yPos,
-            this.width * this.imgScale / this.numberOfFrames,
-            this.height * this.imgScale
+            this.getRealWidth(),
+            this.getRealHeight()
         )
     }
 

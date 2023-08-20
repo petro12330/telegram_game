@@ -94,7 +94,14 @@ const main = () => {
     }
 }
 const mainLoop = () => {
+    if (appState.isInitial) {
+        appState.sprites = []
+    }
     main()
+    if (appState.isInitial){
+        appState.isInitial = false
+    }
+
     requestAnimationFrame(mainLoop)
 }
 
@@ -104,12 +111,12 @@ const setCanvasSize = () => {
     let canvasOldHeight = canvas.height
     canvas.height = window.innerHeight * 0.8
 
-    if (window.innerWidth >900) {
+    if (window.innerWidth > 600) {
         // For laptop
         canvas.width = 600
     } else {
         canvas.width = window.innerWidth;
-        canvas.height = 700;
+        // canvas.height = 700;
     }
     if (canvas.width !== canvasOldWidth || canvas.height !== canvasOldHeight){
         appState.isInitial = true

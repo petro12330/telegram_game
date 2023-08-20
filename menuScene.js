@@ -2,9 +2,9 @@ import {Sprite} from "./sprite.js";
 import {appState} from "./state.js";
 import {getImageSrc} from "./main.js";
 
-let n = 0
 const drawGround = () => {
-    let imgScale =  appState.canvas.width /1166
+    let imgScale = 0.5
+    console.log(window.innerWidth)
     let leftGround = appState.resources.get(getImageSrc("ground_left.svg"),)
     let rightGround = appState.resources.get(getImageSrc("ground_right.svg"),)
     let centralGround = appState.resources.get(getImageSrc("ground_bg.svg"),)
@@ -12,49 +12,39 @@ const drawGround = () => {
     let leftGroundSprite = new Sprite({
         ctx: appState.ctx,
         image: leftGround,
-        width: leftGround.width,
-        height: leftGround.height,
-        numberOfFrames: 0,
-        ticksPerFrame: 0,
         imgScale: imgScale,
         xPos: marginGroundSprite,
-        yPos: appState.canvas.height - (imgScale*leftGround.height)
+        yPos: appState.canvas.height - (imgScale * leftGround.height)
     })
-    appState.sprites["ground_left"]= leftGroundSprite
-    // let spaceBetweenGround = appState.canvas.width - leftGroundSprite.width - (marginGroundSprite * 2) - rightGround.width
-    // console.log(spaceBetweenGround)
-    // console.log(centralGround.width)
-    // if (spaceBetweenGround > 0) {
-    //     let i = spaceBetweenGround;
-    //     while (i) { // когда i будет равно 0, условие станет ложным, и цикл остановится
-    //         let centralGroundSprite = new Sprite({
-    //             ctx: appState.ctx,
-    //             image: centralGround,
-    //             width: 280,
-    //             height: 190,
-    //             numberOfFrames: 0,
-    //             ticksPerFrame: 0,
-    //             imgScale: 1,
-    //             xPos: marginGroundSprite + leftGroundSprite.width + i,
-    //             yPos: leftGroundSprite.yPos
-    //         })
-    //         appState.sprites.push(centralGroundSprite)
-    //         i--
-    //     }
-    //
-    // }
-    // let rightGroundSprite = new Sprite({
-    //     ctx: appState.ctx,
-    //     image: rightGround,
-    //     width: 390,
-    //     height: 190,
-    //     numberOfFrames: 0,
-    //     ticksPerFrame: 0,
-    //     imgScale: 1,
-    //     xPos: appState.canvas.width - marginGroundSprite - rightGround.width,
-    //     yPos: leftGroundSprite.yPos
-    // })
-    // appState.sprites.push(rightGroundSprite)
+    appState.sprites["ground_left"] = leftGroundSprite
+    console.log(appState.canvas.width)
+
+    let spaceBetweenGround = appState.canvas.width - (leftGroundSprite.width*imgScale) - (marginGroundSprite * 2) - (rightGround.width* imgScale)
+    console.log("spaceBetweenGround", spaceBetweenGround)
+    if (spaceBetweenGround > 0) {
+        let i = spaceBetweenGround/(centralGround.width*imgScale);
+        while (i !== -1) { // когда i будет равно 0, условие станет ложным, и цикл остановится
+            let centralGroundSprite = new Sprite({
+                ctx: appState.ctx,
+                image: centralGround,
+                imgScale: imgScale,
+                xPos: leftGroundSprite.getRealWidth()+(centralGround.width*imgScale*i),
+                yPos: leftGroundSprite.yPos
+            })
+            appState.sprites[`central_ground${i}`] = centralGroundSprite
+            i--
+        }
+    }
+    // console.log(appState.canvas.width)
+    // console.log(rightGround.width*imgScale)
+    let rightGroundSprite = new Sprite({
+        ctx: appState.ctx,
+        image: rightGround,
+        imgScale: imgScale,
+        xPos: appState.canvas.width - marginGroundSprite - (rightGround.width*imgScale),
+        yPos: leftGroundSprite.yPos
+    })
+    appState.sprites["ground_right"] = rightGroundSprite
 
 
 }
@@ -62,7 +52,6 @@ export const drawMenu = () => {
     if (appState.isInitial) {
         drawGround()
         initDrawMenu()
-        appState.isInitial = false
     }
 }
 
