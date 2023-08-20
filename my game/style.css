@@ -1,0 +1,41 @@
+* {
+    padding: 0;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    background-size: cover;
+}
+
+.container{
+    margin: auto;
+    width: 100%;
+    position: fixed;
+    background-color: #333;
+    visibility: visible;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+#canvas_wrap{
+    background-color: #d3f7ff;
+    max-width: 1900px;
+    height: 100vh;
+}
+/*canvas {*/
+
+/*}*/
+
+@media screen and (max-width: 900px) {
+    canvas {
+        max-width: 1000%;
+    }
+}
