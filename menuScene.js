@@ -18,7 +18,7 @@ const drawGround = () => {
         ticksPerFrame: 0,
         imgScale: imgScale,
         xPos: marginGroundSprite,
-        yPos: appState.canvas.height / 1.1
+        yPos: appState.canvas.height - (imgScale*leftGround.height)
     })
     appState.sprites["ground_left"]= leftGroundSprite
     // let spaceBetweenGround = appState.canvas.width - leftGroundSprite.width - (marginGroundSprite * 2) - rightGround.width
