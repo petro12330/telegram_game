@@ -11,7 +11,7 @@ export const appState = {
     "score": 0,
     "isInitial": true,
     "baseState": baseStateEnum.menu,
-    "sprites": [],
+    "sprites": {},
     "ctx": null,
     "canvas": null,
     "resources": null

@@ -97,13 +97,31 @@ const mainLoop = () => {
     main()
     requestAnimationFrame(mainLoop)
 }
+
+const setCanvasSize = () => {
+    console.log(1)
+    let canvasOldWidth = canvas.width
+    let canvasOldHeight = canvas.height
+    canvas.height = window.innerHeight * 0.8
+
+    if (window.innerWidth >900) {
+        // For laptop
+        canvas.width = 600
+    } else {
+        canvas.width = window.innerWidth;
+        canvas.height = 700;
+    }
+    if (canvas.width !== canvasOldWidth || canvas.height !== canvasOldHeight){
+        appState.isInitial = true
+    }
+
+}
 const init = () => {
 
     canvas = document.getElementById("canvas");
     ctx = canvas.getContext("2d");
 
-    canvas.height = 2000
-    canvas.width = 900
+    setCanvasSize()
 
     appState.ctx = ctx
     appState.canvas = canvas
@@ -115,3 +133,4 @@ const init = () => {
 window.onload = function () {
     init();
 };
+window.addEventListener('resize', setCanvasSize);
