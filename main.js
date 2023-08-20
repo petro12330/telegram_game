@@ -1,124 +1,115 @@
+import {appState} from "./state.js";
+import {Sprite} from "./sprite.js";
 
-// Game
-const cards = document.querySelectorAll('.memory-card');
 
-let hasFlippedCard = false;
-let lockBoard = false;
-let firstCard, secondCard;
+let canvas
+let ctx
+(function () {
+    var resourceCache = {};
+    var loading = [];
+    var readyCallbacks = [];
 
-let randomAbc = "lehaturebashitkur";
-let randomString = "";
-while (randomString.length < 2) {
-    randomString += randomAbc[Math.floor(Math.random() * randomAbc.length)].toLocaleUpperCase();
-}
-
-let date = new Date;
-let month = (date.getMonth() + 1).toString();
-let day = date.getDate().toString();
-let codeDate = day + month;
-
-let scoreCount = 0;
-function flipCard() {
-    scoreCount++;
-    document.getElementById("score__now").innerHTML = "Steps:" + Math.floor(scoreCount/2);
-    document.getElementById("score__result").innerHTML = "You steps:" + " " + Math.floor(scoreCount/2) + "Steps";
-    if (scoreCount/2 <= 6) {
-        document.getElementById("prize").innerHTML = "You have 20% discount";
-        document.getElementById("benefit").innerHTML = randomOne() + "20" + randomString + codeDate;
-    } else if (scoreCount/2 > 6 && scoreCount/2 <= 10) {
-        document.getElementById("prize").innerHTML = "You have 15% discount";
-        document.getElementById("benefit").innerHTML = randomOne() + "15" + randomString + codeDate;
-    } else {
-        document.getElementById("prize").innerHTML = "You have 15% discount";
-        document.getElementById("benefit").innerHTML = randomOne() + "15" + randomString + codeDate;
+    // Load an image url or an array of image urls
+    function load(urlOrArr) {
+        if (urlOrArr instanceof Array) {
+            urlOrArr.forEach(function (url) {
+                _load(url);
+            });
+        } else {
+            _load(urlOrArr);
+        }
     }
-    if (lockBoard) return;
-    if (this === firstCard) return;
-    this.classList.add('flip');
-    if (!hasFlippedCard) {
-        hasFlippedCard = true;
-        firstCard = this;
 
-        return;
+    function _load(url) {
+        if (resourceCache[url]) {
+            return resourceCache[url];
+        } else {
+            var img = new Image();
+            img.onload = function () {
+                resourceCache[url] = img;
+
+                if (isReady()) {
+                    readyCallbacks.forEach(function (func) {
+                        func();
+                    });
+                }
+            };
+            resourceCache[url] = false;
+            img.src = url;
+        }
     }
-    hasFlippedCard = false;
-    secondCard = this;
 
-    checkForMatching();
-}
-
-function checkForMatching() {
-    let isMatch = firstCard.dataset.framework === secondCard.dataset.framework;
-    isMatch ? (disableCards(), endGame()) : unflipCards();
-
-}
-let count = 0;
-function endGame() {
-    count += 1;
-    if (count === 6) {
-        showPopup();
+    function get(url) {
+        return resourceCache[url];
     }
-}
 
-function disableCards() {
-    firstCard.removeEventListener('click', flipCard);
-    secondCard.removeEventListener('click', flipCard);
-    resetBoard();
-}
+    function isReady() {
+        var ready = true;
+        for (var k in resourceCache) {
+            if (resourceCache.hasOwnProperty(k) &&
+                !resourceCache[k]) {
+                ready = false;
+            }
+        }
+        return ready;
+    }
 
-function unflipCards() {
-    lockBoard = true;
-    setTimeout(() => {
-        firstCard.classList.remove('flip');
-        secondCard.classList.remove('flip');
-        resetBoard();
-    }, 1300);
-}
-function resetBoard() {
-    [hasFlippedCard, lockBoard] = [false, false];
-    [firstCard, secondCard] = [null, null];
-}
+    function onReady(func) {
+        readyCallbacks.push(func);
+    }
 
-(function shuffle() {
-    cards.forEach(card => {
-        let randomPos = Math.floor(Math.random() * 12);
-        card.style.order = randomPos;
-    });
+    window.resources = {
+        load: load,
+        get: get,
+        onReady: onReady,
+        isReady: isReady
+    };
 })();
-cards.forEach(card => card.addEventListener('click', flipCard));
+resources.load([
+    '../../imgs/ground_bg.svg',
+    '../../imgs/ground_left.svg',
+    '../../imgs/ground_right.svg',
+    '../../imgs/base.png',
+    '../../imgs/rotate_1.png',
+    '../../imgs/rotate_2.png',
+    '../../imgs/rotate_3.png',
+    '../../imgs/rotate_4.png',
+    '../../imgs/rotate_5.png',
+    '../../imgs/rotate_6.png',
+    '../../imgs/rotate_7.png',
+]);
 
-// POPUP
 
-let popup = document.getElementById('popup');
-let start = document.getElementById('start');
-
-function hidePopup() {
-    popup.style.opacity = "0"
-    popup.style.visibility = "hidden"
+const clearCanvas = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-start.addEventListener('click', hidePopup);
+const main = () => {
+    clearCanvas()
+    appState.baseState.callback()
+    for (var numSprite in appState.sprites) {
+        appState.sprites[numSprite].start()
+    }
+}
+const mainLoop = () => {
+    main()
+    requestAnimationFrame(mainLoop)
+}
+const init = () => {
 
-// Popup Endgame
-let popupend = document.getElementById('popup__end');
-function showPopup() {
-    popupend.style.opacity = "1"
-    popupend.style.visibility = "visible"
+    canvas = document.getElementById("canvas");
+    ctx = canvas.getContext("2d");
+
+    canvas.height = 2000
+    canvas.width = 900
+
+    appState.ctx = ctx
+    appState.canvas = canvas
+    appState.resources = resources
+
+    mainLoop()
 }
 
-function randomOne() {
-    return Math.floor(Math.random() * 100000);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
+window.onload = function () {
+    init();
+};
