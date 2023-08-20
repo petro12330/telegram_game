@@ -106,7 +106,7 @@
 //     canvas.width = 900
 //     ctx = canvas.getContext("2d");
 //     let coinImage = new Image();
-//     coinImage.src = '../../imgs/1 Pink_Monster/Pink_Monster_Jump_8.png';
+//     coinImage.src = '../../imgs/pink_monster_1/pink_monster_jump_8.png';
 //     sprite = new Sprite({
 //         ctx: ctx,
 //         image: coinImage,
@@ -121,7 +121,7 @@
 //     sprites.push(sprite)
 //     let coinImage1 = new Image();
 //
-//     coinImage1.src = '../../imgs/1 Pink_Monster/Pink_Monster_Run_6.png';
+//     coinImage1.src = '../../imgs/pink_monster_1/Pink_Monster_Run_6.png';
 //     let sprite1 = new Sprite({
 //         ctx: ctx,
 //         image: coinImage1,

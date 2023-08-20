@@ -1,7 +1,9 @@
 import {appState} from "./state.js";
-import {Sprite} from "./sprite.js";
 
-
+let imgPath = 'imgs/'
+export const getImageSrc = (imgName) => {
+    return `${imgPath}${imgName}`
+}
 let canvas
 let ctx
 (function () {
@@ -66,17 +68,17 @@ let ctx
     };
 })();
 resources.load([
-    '../imgs/ground_bg.svg',
-    '../imgs/ground_left.svg',
-    '../imgs/ground_right.svg',
-    '../imgs/base.png',
-    '../imgs/rotate_1.png',
-    '../imgs/rotate_2.png',
-    '../imgs/rotate_3.png',
-    '../imgs/rotate_4.png',
-    '../imgs/rotate_5.png',
-    '../imgs/rotate_6.png',
-    '../imgs/rotate_7.png',
+    getImageSrc("ground_bg.svg"),
+    getImageSrc("ground_left.svg"),
+    getImageSrc("ground_right.svg"),
+    getImageSrc("base.png"),
+    getImageSrc("rotate_1.png"),
+    getImageSrc("rotate_2.png"),
+    getImageSrc("rotate_3.png"),
+    getImageSrc("rotate_4.png"),
+    getImageSrc("rotate_5.png"),
+    getImageSrc("rotate_6.png"),
+    getImageSrc("rotate_7.png"),
 ]);
 
 
