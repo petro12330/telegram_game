@@ -96,12 +96,27 @@ const clearCanvas = () => {
     appState.ctx.clearRect(0, 0, appState.canvas.width, appState.canvas.height);
     appState.bufferCtx.clearRect(0, 0, appState.canvas.width, appState.canvas.height);
 }
+var fps = 0;
+var startTime, endTime;
 
+function updateFPS() {
+    appState.ctx.fillStyle = "black";
+    appState.ctx.font = "16px Arial";
+    appState.ctx.fillText("FPS: " + fps, 10, 20);
+}
+let intervalID = -1;
 const main = () => {
     clearCanvas()
     if (appState.isInitial) {
         appState.baseState.initFunc()
     }
+    endTime = performance.now();
+    var deltaTime = endTime - startTime;
+    fps = Math.round(1000 / deltaTime);
+    startTime = endTime;
+
+    // Обновление FPS на экране
+    updateFPS();
     appState.baseState.callback()
     for (var numSprite in appState.sprites) {
         appState.sprites[numSprite].start()
@@ -112,15 +127,28 @@ const mainLoop = () => {
     if (appState.isInitial && appState.baseState.needClearSprites) {
         appState.sprites = {}
     }
-    const start= new Date().getTime();
+
     main()
-    const end = new Date().getTime();
-    console.log(`SecondWay: ${end - start}ms`);
+
     if (appState.isInitial){
         appState.isInitial = false
     }
-
-    requestAnimationFrame(mainLoop)
+    if (window.requestAnimationFrame)
+        window.requestAnimationFrame(mainLoop);
+    else if (window.msRequestAnimationFrame)
+        window.msRequestAnimationFrame(mainLoop);
+    else if (window.webkitRequestAnimationFrame)
+        window.webkitRequestAnimationFrame(mainLoop);
+    else if (window.mozRequestAnimationFrame)
+        window.mozRequestAnimationFrame(mainLoop);
+    else if (window.oRequestAnimationFrame)
+        window.oRequestAnimationFrame(mainLoop);
+    else {
+        QueueNewFrame = function () {
+        };
+        intervalID = window.setInterval(mainLoop, 16.7);
+    }
+    // requestAnimationFrame(mainLoop)
 }
 
 const setCanvasSize = () => {
@@ -157,7 +185,6 @@ const init = () => {
 }
 const playBtn = document.getElementById('play-btn');
 function handlePlay() {
-    console.log("Button clicked!");
     appState.baseState = baseStateEnum.play_animation
     appState.isInitial = true
 }

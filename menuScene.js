@@ -82,7 +82,7 @@ const changeCloud = () => {
 }
 export const drawMenu = () => {
     if (appState.isInitial) {
-        // drawGround()
+        drawGround()
         drawBaseSprite()
         initDrawMenu()
         initCloud()
