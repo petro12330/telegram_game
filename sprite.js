@@ -1,6 +1,7 @@
 export class Sprite {
     constructor(options) {
         this.ctx = options.ctx;
+        this.bufferCtx = options.bufferCtx;
 
         this.image = options.image;
 
@@ -56,8 +57,7 @@ export class Sprite {
     }
 
     render() {
-
-        this.ctx.drawImage(
+        this.bufferCtx.drawImage(
             this.image,
             this.frameIndex * this.width / this.numberOfFrames,
             0,
@@ -68,6 +68,17 @@ export class Sprite {
             this.getRealWidth(),
             this.getRealHeight()
         )
+        // this.ctx.drawImage(
+        //     this.image,
+        //     this.frameIndex * this.width / this.numberOfFrames,
+        //     0,
+        //     this.width / this.numberOfFrames,
+        //     this.height,
+        //     this.xPos,
+        //     this.yPos,
+        //     this.getRealWidth(),
+        //     this.getRealHeight()
+        // )
     }
 
     start() {

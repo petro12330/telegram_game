@@ -92,6 +92,7 @@ resources.load([
 
 const clearCanvas = () => {
     appState.ctx.clearRect(0, 0, appState.canvas.width, appState.canvas.height);
+    appState.bufferCtx.clearRect(0, 0, appState.canvas.width, appState.canvas.height);
 }
 
 const main = () => {
@@ -100,6 +101,7 @@ const main = () => {
     for (var numSprite in appState.sprites) {
         appState.sprites[numSprite].start()
     }
+    appState.ctx.drawImage(appState.bufferCanvas, 0, 0)
 }
 const mainLoop = () => {
     if (appState.isInitial) {
@@ -126,6 +128,8 @@ const setCanvasSize = () => {
         appState.canvas.width = window.innerWidth;
         // canvas.height = 700;
     }
+    appState.bufferCanvas.width = appState.canvas.width
+    appState.bufferCanvas.height = appState.canvas.height
     // if (canvas.width !== canvasOldWidth || canvas.height !== canvasOldHeight){
     //     appState.isInitial = true
     // }
