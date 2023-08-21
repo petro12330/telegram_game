@@ -11,7 +11,6 @@ const drawGround = () => {
     let rightGround = appState.resources.get(getImageSrc("ground_right.svg"),)
     let centralGround = appState.resources.get(getImageSrc("ground_bg.svg"),)
     let marginGroundSprite = 0
-
     groundYCor = appState.canvas.height - (imgScale * leftGround.height)
     let leftGroundSprite = new Sprite({
         ctx: appState.ctx,
@@ -78,12 +77,12 @@ const initCloud = () => {
 
 const changeCloud = () => {
     let cloudImageSrc = getImageSrc(`cloud/all_cloud.png`)
-    let cloudMenuSpeed = 0.2
+    let cloudMenuSpeed = 1
     appState.sprites[cloudImageSrc].changeCor({"changeX": cloudMenuSpeed})
 }
 export const drawMenu = () => {
     if (appState.isInitial) {
-        drawGround()
+        // drawGround()
         drawBaseSprite()
         initDrawMenu()
         initCloud()
@@ -96,4 +95,52 @@ export const drawMenu = () => {
 
 export const initDrawMenu = () => {
 
+}
+export const startPlayAnimation = () => {
+    // return
+    let cloudImageSrc = getImageSrc(`cloud/all_cloud.png`)
+    let cloudMenuSpeed = -1
+    appState.sprites[cloudImageSrc].changeCor({"changeX": cloudMenuSpeed})
+
+    for (const spriteKey in appState.sprites) {
+        if (spriteKey.indexOf('ground') !== -1) {
+            appState.sprites[spriteKey].changeCor({"changeX": cloudMenuSpeed})
+        }
+    }
+    let spriteChangePos = {
+        "changeX": 4
+    }
+    let mainSprite = appState.sprites["mainSprite"]
+    if (mainSprite.xPos >= appState.bufferCanvas.width * 0.5) {
+        spriteChangePos['changeY'] = -2
+        let spriteImage = appState.resources.get(getImageSrc("pink_monster_1/pink_monster_jump_8.png"))
+        mainSprite.changeImg(
+            {
+                ctx: appState.ctx,
+                bufferCtx: appState.bufferCtx,
+                image: spriteImage,
+                numberOfFrames: 8,
+                ticksPerFrame: 40,
+                imgScale: 3,
+            }
+        )
+    }
+    mainSprite.changeCor(spriteChangePos)
+}
+
+export const initPlayAnimation = () => {
+    console.log("delete sprite")
+    delete appState.sprites[getImageSrc("pink_monster_1/pink_monster_climb_4.png")];
+    let spriteSrc = getImageSrc("pink_monster_1/pink_monster_run_6.png")
+    let spriteImage = appState.resources.get(spriteSrc)
+    appState.sprites["mainSprite"] = new Sprite({
+        ctx: appState.ctx,
+        bufferCtx: appState.bufferCtx,
+        image: spriteImage,
+        numberOfFrames: 6,
+        ticksPerFrame: 20,
+        imgScale: 3,
+        xPos: 0,
+        yPos: groundYCor - (spriteImage.height * 2.5)
+    })
 }

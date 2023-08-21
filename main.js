@@ -1,4 +1,4 @@
-import {appState} from "./state.js";
+import {appState, baseStateEnum} from "./state.js";
 
 let imgPath = 'imgs/'
 export const getImageSrc = (imgName) => {
@@ -80,6 +80,8 @@ resources.load([
     getImageSrc("rotate_6.png"),
     getImageSrc("rotate_7.png"),
     getImageSrc("pink_monster_1/pink_monster_climb_4.png"),
+    getImageSrc("pink_monster_1/pink_monster_run_6.png"),
+    getImageSrc("pink_monster_1/pink_monster_jump_8.png"),
     getImageSrc("cloud/cloud_1.png"),
     getImageSrc("cloud/cloud_2.png"),
     getImageSrc("cloud/cloud_3.png"),
@@ -97,6 +99,9 @@ const clearCanvas = () => {
 
 const main = () => {
     clearCanvas()
+    if (appState.isInitial) {
+        appState.baseState.initFunc()
+    }
     appState.baseState.callback()
     for (var numSprite in appState.sprites) {
         appState.sprites[numSprite].start()
@@ -104,10 +109,13 @@ const main = () => {
     appState.ctx.drawImage(appState.bufferCanvas, 0, 0)
 }
 const mainLoop = () => {
-    if (appState.isInitial) {
+    if (appState.isInitial && appState.baseState.needClearSprites) {
         appState.sprites = {}
     }
+    const start= new Date().getTime();
     main()
+    const end = new Date().getTime();
+    console.log(`SecondWay: ${end - start}ms`);
     if (appState.isInitial){
         appState.isInitial = false
     }
@@ -147,7 +155,14 @@ const init = () => {
 
     mainLoop()
 }
+const playBtn = document.getElementById('play-btn');
+function handlePlay() {
+    console.log("Button clicked!");
+    appState.baseState = baseStateEnum.play_animation
+    appState.isInitial = true
+}
 
+playBtn.addEventListener('click', handlePlay);
 window.onload = function () {
     init();
 };

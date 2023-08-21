@@ -1,11 +1,19 @@
-import {drawMenu, initDrawMenu} from "./menuScene.js";
+import {drawMenu, initDrawMenu, initPlayAnimation, startPlayAnimation} from "./menuScene.js";
 
-const baseStateEnum = {
+export const baseStateEnum = {
     "menu": {
         "value": "menu",
         "callback": drawMenu,
-        "initFunc": initDrawMenu
+        "initFunc": initDrawMenu,
+        "needClearSprites": true,
+    },
+    "play_animation": {
+        "needClearSprites": false,
+        "value": "play_animation",
+        "callback": startPlayAnimation,
+        "initFunc": initPlayAnimation
     }
+
 }
 export const appState = {
     "ctx": null,
